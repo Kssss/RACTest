@@ -8,13 +8,17 @@
 #import "ViewController.h"
 #import <ReactiveObjC.h>
 #import "RACReturnSignal.h"
-
+#import "RequestViewModel.h"
+#import "LoginViewModel.h"
+#import "LoginViewModel2.h"
 @interface ViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *textFiled;
 @property (weak, nonatomic) IBOutlet UITextField *textFiled2;
 @property (weak, nonatomic) IBOutlet UIButton *submitBtn;
 @property (nonatomic, strong) RACSignal *signal;
-
+@property (nonatomic, strong) RequestViewModel * viewModel;
+@property (nonatomic, strong) LoginViewModel * loginViewModel;
+@property (nonatomic, strong) LoginViewModel2 * loginViewmodel2;
 @end
 
 @implementation ViewController
@@ -22,9 +26,120 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"RAC练习";
+   
+    [self mvvmTest3];
 }
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    [self switchToLatest];
+ 
+#pragma mark - MVVM 场景
+// MVVM:
+// VM:视图模型----处理展示的业务逻辑  最好不要包括视图
+// 每一个控制器都对应一个VM模型
+// MVVM:开发中先创建VM，把业务逻辑处理好，然后在控制器里执行
+- (void)mvvmTest3{
+    self.textFiled.text = self.textFiled2.text = @"";
+    if (self.loginViewmodel2 == nil) {
+        self.loginViewmodel2 = [[LoginViewModel2 alloc] init];
+    }
+    //
+    RAC(self.loginViewmodel2,pwd) = self.textFiled2.rac_textSignal;
+    RAC(self.loginViewmodel2,userName) = self.textFiled.rac_textSignal;
+    
+    RAC(self.submitBtn,enabled) = self.loginViewmodel2.loginBtnEnableSignal;
+    
+    [self.loginViewmodel2.loginCommand.executionSignals.switchToLatest subscribeNext:^(id  _Nullable x) {
+        if (x) {
+            NSLog(@" 登录成功 -x %@",x);
+        }else{
+            NSLog(@" 登录失败");
+        }
+        
+    }];
+    
+    [[self.loginViewmodel2.loginCommand.executing skip:1] subscribeNext:^(NSNumber * _Nullable x) {
+        if ([x boolValue]) {
+            NSLog(@"正在执行");
+        }else{
+            NSLog(@"执行完成");
+        }
+    } completed:^{
+            NSLog(@"信号完成");
+    }];
+    
+    [[self.submitBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
+        NSLog(@"点击登录");
+        [self.loginViewmodel2.loginCommand execute:nil];
+    }];
+    
+}
+- (void)mvvmTest2{
+    self.textFiled.text = @"";
+    self.textFiled2.text = @"";
+    if (self.loginViewModel == nil) {
+        self.loginViewModel = [[LoginViewModel alloc] init];
+    }
+    // 做一个密码和账号框都有值 确定才能点击，点击按钮就可以请求登录
+    // 思路
+    // 密码和输入框 关联到 按钮的激活
+    // 按钮的点击执行命令
+    // 订阅命令的信号
+    {
+        RACSignal * signal = [RACSignal combineLatest:@[self.textFiled.rac_textSignal,self.textFiled2.rac_textSignal] reduce:^id (NSString *text1 ,NSString * text2){
+            return @(text1.length && text2.length);
+        }];
+        RAC(self.submitBtn,enabled) = signal;
+    }
+    
+    //也可以从信号源里面拿到信号，当然也可以从 execute:
+//    [self.loginViewModel.loginCommand.executionSignals subscribeNext:^(RACSignal *  _Nullable x) {
+//        [x subscribeNext:^(id  _Nullable x) {
+//            NSLog(@"信号源里面的信号  -- 登录完成");
+//        } error:^(NSError * _Nullable error) {
+//            NSLog(@" error - %@",error);
+//        } completed:^{
+//            NSLog(@"completed!");
+//        }];
+//    }];
+   
+    //跳过一个信号，默认会有一个0 过来
+    [[self.loginViewModel.loginCommand.executing skip:1] subscribeNext:^(NSNumber * _Nullable x) {
+//        NSLog(@"executing - %@",x);
+        if ([x boolValue]) {
+            NSLog(@"正在执行。。。");
+        }else{
+            NSLog(@"执行完成");
+        }
+    }];
+
+    
+    @weakify(self)
+    [[self.submitBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
+        @strongify(self);
+        NSLog(@"点击按钮");
+        RACSignal * loginSinal = [self.loginViewModel.loginCommand execute:nil];
+        [loginSinal subscribeNext:^(id  _Nullable x) {
+            NSLog(@"   登录完成 - %@",x);
+        } error:^(NSError * _Nullable error) {
+            NSLog(@" error - %@",error);
+        } completed:^{
+            NSLog(@"completed!");
+        }];
+        
+    }];
+    
+    
+    
+    
+}
+- (void)mvvmTest1{
+    if (self.viewModel == nil) {
+        self.viewModel = [[RequestViewModel alloc] init];
+    }
+    RACSignal * signal = [self.viewModel.requestCommand execute:nil];
+    [signal subscribeNext:^(id  _Nullable x) {
+        NSLog(@"%@",x);
+        self.textFiled.text = x[@"from"];
+        self.textFiled2.text = x[@"name"];
+    }];
 }
 #pragma mark - RACCommand
 - (void)commandTest1{

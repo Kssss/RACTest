@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		8519596992AB7AC271BF78DB /* Pods_RACTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B8AF350349CAC68DB820540 /* Pods_RACTest.framework */; };
+		DE329B7126DBC91E00A9336E /* LoginViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DE329B7026DBC91E00A9336E /* LoginViewModel.m */; };
+		DE329B8026DBDC0B00A9336E /* LoginViewModel2.m in Sources */ = {isa = PBXBuildFile; fileRef = DE329B7F26DBDC0B00A9336E /* LoginViewModel2.m */; };
+		DE898AFB26DBBD2500201C78 /* RequestViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DE898AFA26DBBD2500201C78 /* RequestViewModel.m */; };
 		DEA7422826D9637800AE4ECF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DEA7422726D9637800AE4ECF /* AppDelegate.m */; };
 		DEA7422B26D9637800AE4ECF /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DEA7422A26D9637800AE4ECF /* SceneDelegate.m */; };
 		DEA7422E26D9637800AE4ECF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEA7422D26D9637800AE4ECF /* ViewController.m */; };
@@ -22,6 +25,12 @@
 		11D4FC303E016950B92AC3E6 /* Pods-RACTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RACTest.release.xcconfig"; path = "Target Support Files/Pods-RACTest/Pods-RACTest.release.xcconfig"; sourceTree = "<group>"; };
 		11FB0D91F1CA6E3AEEC57375 /* Pods-RACTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RACTest.debug.xcconfig"; path = "Target Support Files/Pods-RACTest/Pods-RACTest.debug.xcconfig"; sourceTree = "<group>"; };
 		6B8AF350349CAC68DB820540 /* Pods_RACTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RACTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE329B6F26DBC91E00A9336E /* LoginViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewModel.h; sourceTree = "<group>"; };
+		DE329B7026DBC91E00A9336E /* LoginViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewModel.m; sourceTree = "<group>"; };
+		DE329B7E26DBDC0B00A9336E /* LoginViewModel2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewModel2.h; sourceTree = "<group>"; };
+		DE329B7F26DBDC0B00A9336E /* LoginViewModel2.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewModel2.m; sourceTree = "<group>"; };
+		DE898AF926DBBD2500201C78 /* RequestViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RequestViewModel.h; sourceTree = "<group>"; };
+		DE898AFA26DBBD2500201C78 /* RequestViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RequestViewModel.m; sourceTree = "<group>"; };
 		DEA7422326D9637700AE4ECF /* RACTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RACTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEA7422626D9637700AE4ECF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		DEA7422726D9637800AE4ECF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -59,6 +68,19 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		DE898AFD26DBBD2A00201C78 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				DE329B7E26DBDC0B00A9336E /* LoginViewModel2.h */,
+				DE329B7F26DBDC0B00A9336E /* LoginViewModel2.m */,
+				DE329B6F26DBC91E00A9336E /* LoginViewModel.h */,
+				DE329B7026DBC91E00A9336E /* LoginViewModel.m */,
+				DE898AF926DBBD2500201C78 /* RequestViewModel.h */,
+				DE898AFA26DBBD2500201C78 /* RequestViewModel.m */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		DEA7421A26D9637700AE4ECF = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +105,7 @@
 				DEA742A826DAB01100AE4ECF /* life */,
 				DEA7422C26D9637800AE4ECF /* ViewController.h */,
 				DEA7422D26D9637800AE4ECF /* ViewController.m */,
+				DE898AFD26DBBD2A00201C78 /* ViewModel */,
 				DEA742A426DAAD9800AE4ECF /* SecondViewController.h */,
 				DEA742A526DAAD9800AE4ECF /* SecondViewController.m */,
 				DEA7422F26D9637800AE4ECF /* Main.storyboard */,
@@ -228,7 +251,10 @@
 			files = (
 				DEA742A626DAAD9800AE4ECF /* SecondViewController.m in Sources */,
 				DEA7422E26D9637800AE4ECF /* ViewController.m in Sources */,
+				DE898AFB26DBBD2500201C78 /* RequestViewModel.m in Sources */,
+				DE329B8026DBDC0B00A9336E /* LoginViewModel2.m in Sources */,
 				DEA7422826D9637800AE4ECF /* AppDelegate.m in Sources */,
+				DE329B7126DBC91E00A9336E /* LoginViewModel.m in Sources */,
 				DEA7423926D9637800AE4ECF /* main.m in Sources */,
 				DEA7422B26D9637800AE4ECF /* SceneDelegate.m in Sources */,
 			);
