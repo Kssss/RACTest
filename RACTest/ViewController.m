@@ -27,7 +27,7 @@
     [super viewDidLoad];
     self.title = @"RAC练习";
    
-    [self mvvmTest3];
+    [self then2];
 }
  
 #pragma mark - MVVM 场景
@@ -489,6 +489,44 @@
     [thenSignal subscribeNext:^(id  _Nullable x) {
         NSLog(@"最终的结果%@",x);
     }];
+    
+}
+
+/// 多个任务都完成以后再去做另一个任务 （A&B）----> C
+- (void)then2{
+    RACSignal * sigA1 = [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSLog(@"发送上半部分的请求-----data1");
+            [subscriber sendNext:@"data1"];
+            [subscriber sendCompleted];
+        });
+        return nil;
+    }];
+    RACSignal * sigA2 = [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSLog(@"发送上半部分的请求-----data2");
+            [subscriber sendNext:@"data2"];
+            [subscriber sendCompleted];
+        });
+        return nil;
+    }];
+    
+    RACSignal * sinA = [sigA1 zipWith:sigA2];
+    
+    RACSignal * sigB =  [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSLog(@"发送下半部分的请求-----data3");
+            [subscriber sendNext:@"data3"];
+        });
+        return nil;
+    }];
+    
+    
+    [[sinA then:^RACSignal * _Nonnull{
+        return sigB;
+    }] subscribeNext:^(id  _Nullable x) {
+        NSLog(@"%@",x);
+    }];;
     
 }
 ///多个信号合成一个信号，无论哪个信号有next 都会触发调用  （A || B || C --> D）
